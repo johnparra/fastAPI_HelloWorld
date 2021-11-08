@@ -3,10 +3,10 @@ from typing import Optional
 from enum import Enum
 
 # Pydantic
-from pydantic import BaseModel, Field, FilePath, DirectoryPath
+from pydantic import BaseModel, Field, FilePath, DirectoryPath, EmailStr
 
 # Fast Api
-from fastapi import FastAPI, Body, Query, Path, status, Form
+from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie
 
 class HairColor(Enum):
     white: "white"
@@ -172,3 +172,28 @@ def update_person(
 )
 def login(username: str = Form(...), password: str = Form(...)):
     return LoginOut(username=username)
+
+@app.post(
+    path="/contact",
+    status_code=status.HTTP_200_OK
+)
+def contact(
+    first_name: str = Form(
+        ...,
+        max_length=20,
+        example="Pedro"
+        ),
+    last_name: str = Form(
+        ...,
+        max_length=20,
+        example="Perez"
+    ),
+    email: EmailStr = Form(...),
+    message: str = Form(
+        ...,
+        min_length=20
+    ),
+    user_agent: Optional[str] = Header(default=None),
+    ads: Optional[str] = Cookie(default=None)
+):
+    return user_agent
