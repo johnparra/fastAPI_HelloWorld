@@ -4,10 +4,13 @@ from enum import Enum
 from fastapi.datastructures import UploadFile
 
 # Pydantic
-from pydantic import BaseModel, Field, FilePath, DirectoryPath, EmailStr
+from pydantic import BaseModel, Field, EmailStr
 
 # Fast Api
-from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie, UploadFile, File
+from fastapi import FastAPI
+from fastapi import Body, Query, Path, Form
+from fastapi import Header, Cookie, HTTPException, status
+from fastapi import UploadFile, File
 
 class HairColor(Enum):
     white: "white"
@@ -133,6 +136,7 @@ def show_person(
 ):
     return {name: age}
 
+persons = [1,2,3,4,5,6,7,8,9]
 
 @app.get(
     path="/person/detail/{person_id}",
@@ -145,6 +149,11 @@ def show_person(
         example=123
     )
 ):
+    if person_id not in persons:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="!The person_id doesn't exist in this information system"
+        )
     return {person_id: "It exist!"}
 
 
