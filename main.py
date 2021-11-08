@@ -200,7 +200,8 @@ def show_person(
 @app.put(
     path="/person/{person_id}",
     status_code=status.HTTP_200_OK,
-    tags=["Persons"]
+    tags=["Persons"],
+    deprecated=True
     )
 def update_person(
     person_id: int = Path(
