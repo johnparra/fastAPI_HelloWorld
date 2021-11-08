@@ -13,7 +13,7 @@ class HairColor(Enum):
     black: "black"
     red: "red"
     blonde: "blonde"
-class Person(BaseModel):
+class PersonOut(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
@@ -32,19 +32,36 @@ class Person(BaseModel):
         le=115,
         example=30
     )
-    hair_color: Optional[HairColor] = Field(default=None, example='white')
+    #hair_color: Optional[HairColor] = Field(default=None, example='white')
     is_married: Optional[bool] = Field(default=None, example='True')
     #photo_file: FilePath(default=None)
     #photo_directory: DirectoryPath(default=None)
-
     class Config:
         schema_extra = {
             'example': {
                 "first_name": "John",
                 "last_name": "Parra",
                 "age": 34,
-                "hair_color": 'black',
+                #"hair_color": "black",
                 "is_married": True
+            }
+        }
+
+class Person(PersonOut):
+    password: str = Field(
+        ..., 
+        min_length=1, 
+        example="123456"
+        )
+    class Config:
+        schema_extra = {
+            'example': {
+                "first_name": "John",
+                "last_name": "Parra",
+                "age": 34,
+                #"hair_color": "black",
+                "is_married": True,
+                "password": "12345689"
             }
         }
 
@@ -71,7 +88,7 @@ def home():
     return {"hello": "WORLD"}
 
 
-@app.post("/person/new")
+@app.post("/person/new", response_model=PersonOut)
 def create_person(person: Person = Body(...)):
     return person
 
