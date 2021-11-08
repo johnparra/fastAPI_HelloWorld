@@ -17,28 +17,50 @@ class Person(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example='James'
         )
     last_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example='Bond'
         )
     age: int = Field(
         ...,
         gt=0,
-        le=115
+        le=115,
+        example=30
     )
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
-    photo_file: FilePath(default=None)
-    photo_directory: DirectoryPath(default=None)
+    hair_color: Optional[HairColor] = Field(default=None, example='white')
+    is_married: Optional[bool] = Field(default=None, example='True')
+    #photo_file: FilePath(default=None)
+    #photo_directory: DirectoryPath(default=None)
+
+    class Config:
+        schema_extra = {
+            'example': {
+                "first_name": "John",
+                "last_name": "Parra",
+                "age": 34,
+                "hair_color": 'black',
+                "is_married": True
+            }
+        }
 
 
 class Location(BaseModel):
     city: str
     state: str
     country: str
+    class Config:
+        schema_extra = {
+            'example': {
+                "city": "Cajica",
+                "state": "Cundinamarca",
+                "country": "Colombia"
+            }
+        }
 
 
 app = FastAPI()
@@ -61,12 +83,14 @@ def show_person(
         title="Name Query",
         description="Name of person from query",
         min_length=1,
-        max_length=50
+        max_length=50,
+        example='Alf'
     ),
     age: str = Query(
         ...,
         title="Age Query",
-        description="Age of person from query"
+        description="Age of person from query",
+        example=456
     )
 ):
     return {name: age}
@@ -76,7 +100,8 @@ def show_person(
 def show_person(
     person_id: int = Path(
         ...,
-        ge=0
+        ge=0,
+        example=123
     )
 ):
     return {person_id: "It exist!"}
@@ -88,7 +113,8 @@ def update_person(
         ...,
         title="person_id",
         description="This is the person_id",
-        gt=0
+        gt=0,
+        example=124
     ),
     person: Person = Body(...),
     location: Location = Body(...)
