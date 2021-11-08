@@ -1,12 +1,13 @@
 # Python
 from typing import Optional
 from enum import Enum
+from fastapi.datastructures import UploadFile
 
 # Pydantic
 from pydantic import BaseModel, Field, FilePath, DirectoryPath, EmailStr
 
 # Fast Api
-from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie
+from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie, UploadFile, File
 
 class HairColor(Enum):
     white: "white"
@@ -197,3 +198,16 @@ def contact(
     ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
+
+@app.post(
+    path="/post-file",
+    status_code=status.HTTP_201_CREATED
+)
+def post_file(
+    file: UploadFile = File(...)
+):
+    return {
+        "filename": file.filename,
+        "type": file.content_type,
+        "size": round(len(file.file.read())/1024, ndigits=2)
+    }
