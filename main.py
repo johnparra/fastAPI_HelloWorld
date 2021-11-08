@@ -103,6 +103,12 @@ app = FastAPI()
     tags=["Clients"]
     )
 def home():
+    """
+    Title
+    Function
+    Parameters
+    Result
+    """
     return {"hello": "WORLD"}
 
 
@@ -110,16 +116,27 @@ def home():
     path="/person/new", 
     response_model=PersonOut,
     status_code=status.HTTP_201_CREATED,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary="Create persons from 0"
     )
 def create_person(person: Person = Body(...)):
+    """
+    Title
+
+    Function
+
+    Parameters
+
+    Result
+    """
     return person
 
 
 @app.get(
     path="/person/detail",
     status_code=status.HTTP_200_OK,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary="Show details from person"
     )
 def show_person(
     name: Optional[str] = Query(
@@ -137,6 +154,15 @@ def show_person(
         example=456
     )
 ):
+    """
+    Title
+
+    Functionality
+
+    Parameters
+
+    Results
+    """
     return {name: age}
 
 persons = [1,2,3,4,5,6,7,8,9]
@@ -144,7 +170,8 @@ persons = [1,2,3,4,5,6,7,8,9]
 @app.get(
     path="/person/detail/{person_id}",
     status_code=status.HTTP_200_OK,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary="Show details from id person"
     )
 def show_person(
     person_id: int = Path(
@@ -153,6 +180,15 @@ def show_person(
         example=123
     )
 ):
+    """
+    Title
+
+    Functionality
+
+    Parameters
+
+    Results
+    """
     if person_id not in persons:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
