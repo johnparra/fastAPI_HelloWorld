@@ -3,7 +3,7 @@ from typing import Optional
 from enum import Enum
 
 # Pydantic
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, FilePath, DirectoryPath
 
 # Fast Api
 from fastapi import FastAPI, Body, Query, Path
@@ -31,6 +31,8 @@ class Person(BaseModel):
     )
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
+    photo_file: FilePath(default=None)
+    photo_directory: DirectoryPath(default=None)
 
 
 class Location(BaseModel):
