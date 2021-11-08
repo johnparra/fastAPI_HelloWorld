@@ -13,7 +13,8 @@ class HairColor(Enum):
     black: "black"
     red: "red"
     blonde: "blonde"
-class PersonOut(BaseModel):
+
+class PersonBase(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
@@ -36,6 +37,7 @@ class PersonOut(BaseModel):
     is_married: Optional[bool] = Field(default=None, example='True')
     #photo_file: FilePath(default=None)
     #photo_directory: DirectoryPath(default=None)
+
     class Config:
         schema_extra = {
             'example': {
@@ -46,8 +48,7 @@ class PersonOut(BaseModel):
                 "is_married": True
             }
         }
-
-class Person(PersonOut):
+class Person(PersonBase):
     password: str = Field(
         ..., 
         min_length=1, 
@@ -65,7 +66,8 @@ class Person(PersonOut):
             }
         }
 
-
+class PersonOut(PersonBase):
+    pass
 class Location(BaseModel):
     city: str
     state: str
