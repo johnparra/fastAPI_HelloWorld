@@ -1,7 +1,6 @@
 # Python
 from typing import Optional
 from enum import Enum
-from fastapi.datastructures import UploadFile
 
 # Pydantic
 from pydantic import BaseModel, Field, EmailStr
